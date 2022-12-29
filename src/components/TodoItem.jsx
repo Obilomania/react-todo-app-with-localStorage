@@ -4,7 +4,7 @@ import { TiEdit } from "react-icons/ti";
 import styled from "styled-components";
 
 const todoItem = (props) => {
-  const { todos, editTodo } = props;
+  const { todos, editTodo, getTodobyId  } = props;
   return (
     <TodoThings>
       <div className="content">
@@ -13,7 +13,7 @@ const todoItem = (props) => {
             <div key={`${todoItem.id}${index}`} className="todo-items">
               <p className="todo-text">{todoItem.text}</p>
               <div className="icons">
-                <RiCloseLine size={20} />
+                      <RiCloseLine size={20} onClick={() => getTodobyId(todoItem.id)} />
                 <TiEdit
                   size={20}
                   onClick={() =>

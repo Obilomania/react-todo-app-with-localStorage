@@ -1,23 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const TodoForm = (props) => {
-  const { getNewTodoItem } = props;
+  const { getNewTodoItem, editTodoData } = props;
   const [inputValue, setInputValue] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
+  //   const isEdit = editTodoData && Object.keys(editTodoData).length !== 0;
+
   const handleInputChange = (event) => {
     const { value } = event.target;
     setInputValue(value);
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const newTodo = {
-      id: Math.floor(Math.random() * 1000),
+      id: isEdit ? editTodoData.id : Math.floor(Math.random() * 1000),
       text: inputValue,
     };
     getNewTodoItem(newTodo);
-    console.log(newTodo);
     setInputValue("");
+    setIsEdit(false );
   };
+
+  useEffect(() => {
+    if (editTodoData && Object.keys(editTodoData).length !== 0) {
+      setInputValue(editTodoData.text);
+      setIsEdit(true);
+    }
+  }, [editTodoData]);
+
   return (
     <Todo>
       <form onSubmit={handleSubmit} className="todoForm">
@@ -28,7 +40,7 @@ const TodoForm = (props) => {
           onChange={handleInputChange}
           placeholder="Enter a to-do"
         />
-        <button type="submit">Add Todo</button>
+        <button type="submit">{isEdit ? "Edit Todo" : "Add Todo"}</button>
       </form>
     </Todo>
   );
@@ -41,9 +53,9 @@ const Todo = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    margin:3rem auto;
+    margin: 3rem auto;
     gap: 0.5rem;
-    width:100%;
+    width: 100%;
   }
   input {
     width: 40%;
